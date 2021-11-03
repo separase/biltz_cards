@@ -1,6 +1,7 @@
 import requests
 import pygame
 import sys
+import json
 
 pygame.init()
 background_colour = (0,128,0)
@@ -13,20 +14,14 @@ screen.fill(background_colour)
 pygame.display.flip()
 phase1=True
 phase2=False
+shuffled=False
+player_1= {}
+player_2= {}
+player_3= {}
+player_4= {}
+deck_id=""
 num_of_players=0
 smallfont = pygame.font.SysFont('Calibri',30)
-#phase1
-if phase1:
-    pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
-    pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
-    pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
-    text1 = smallfont.render('2 Players' , True , (0,0,0))
-    screen.blit(text1, (width/2-215,height/2-14))
-    text2 = smallfont.render('3 Players' , True , (0,0,0))
-    screen.blit(text2, (width/2-55,height/2-14))
-    text3 = smallfont.render('4 Players' , True , (0,0,0))
-    screen.blit(text3, (width/2+105,height/2-14))
-#
 while True:
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -35,6 +30,7 @@ while True:
                 phase1=False
                 phase2=True
                 num_of_players=2
+                
                 print(num_of_players)
                 pygame.display.update()
             elif (width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20):
@@ -80,6 +76,15 @@ while True:
             pygame.display.update()
     if phase2:
         screen.fill((0,128,0))
-    pygame.display.update()
+        if not shuffled:
+            deck=(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")).json()
+            deck_id=deck["deck_id"]
+            shuffled=True
+        for i in range(num_of_players):
 
-print(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1").text)
+        """
+        draw 3 cards from the deck for each player
+            repeat card-drawing process based on the amount of players, and assign those cards to them
+
+        """
+    pygame.display.update()
