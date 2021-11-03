@@ -1,0 +1,85 @@
+import requests
+import pygame
+import sys
+
+pygame.init()
+background_colour = (0,128,0)
+(width, height) = (1080, 720)
+color_light = (170,170,170)
+color_dark = (100,100,100)
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Tutorial 1')
+screen.fill(background_colour)
+pygame.display.flip()
+phase1=True
+phase2=False
+num_of_players=0
+smallfont = pygame.font.SysFont('Calibri',30)
+#phase1
+if phase1:
+    pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
+    pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+    pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+    text1 = smallfont.render('2 Players' , True , (0,0,0))
+    screen.blit(text1, (width/2-215,height/2-14))
+    text2 = smallfont.render('3 Players' , True , (0,0,0))
+    screen.blit(text2, (width/2-55,height/2-14))
+    text3 = smallfont.render('4 Players' , True , (0,0,0))
+    screen.blit(text3, (width/2+105,height/2-14))
+#
+while True:
+    mouse = pygame.mouse.get_pos()
+    for event in pygame.event.get():
+        if phase1==True and event.type == pygame.MOUSEBUTTONDOWN:
+            if (width/2-230 <= mouse[0] <= width/2-90 and height/2-20 <= mouse[1] <= height/2+20):
+                phase1=False
+                phase2=True
+                num_of_players=2
+                print(num_of_players)
+                pygame.display.update()
+            elif (width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20):
+                phase1=False
+                phase2=True
+                num_of_players=3
+                print(num_of_players)
+                pygame.display.update()
+            elif (width/2+90 <= mouse[0] <= width/2+230 and height/2-20 <= mouse[1] <= height/2+20):
+                phase1=False
+                phase2=True
+                num_of_players=4
+                print(num_of_players)
+                pygame.display.update()
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    if phase1:
+        if width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20:
+            pygame.draw.rect(screen,color_light,[width/2-70,height/2-20,140,40])
+            text1 = smallfont.render('3 Players' , True , (0,0,0))
+            screen.blit(text1, (width/2-55,height/2-14))
+            pygame.display.update()
+        elif width/2-230 <= mouse[0] <= width/2-90 and height/2-20 <= mouse[1] <= height/2+20:
+            pygame.draw.rect(screen,color_light,[width/2-230,height/2-20,140,40])
+            text2 = smallfont.render('2 Players' , True , (0,0,0))
+            screen.blit(text2,(width/2-215,height/2-14))
+            pygame.display.update()
+        elif width/2+90 <= mouse[0] <= width/2+230 and height/2-20 <= mouse[1] <= height/2+20:
+            pygame.draw.rect(screen,color_light,[width/2+90,height/2-20,140,40])
+            text3 = smallfont.render('4 Players' , True , (0,0,0))
+            screen.blit(text3, (width/2+105,height/2-14))
+            pygame.display.update()
+        else:
+            pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+            text1 = smallfont.render('2 Players' , True , (0,0,0))
+            screen.blit(text1, (width/2-215,height/2-14))
+            text2 = smallfont.render('3 Players' , True , (0,0,0))
+            screen.blit(text2, (width/2-55,height/2-14))
+            text3 = smallfont.render('4 Players' , True , (0,0,0))
+            screen.blit(text3, (width/2+105,height/2-14))
+            pygame.display.update()
+    if phase2:
+        screen.fill((0,128,0))
+    pygame.display.update()
+
+print(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1").text)
