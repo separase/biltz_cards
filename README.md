@@ -1,1 +1,3 @@
-# biltz_cards
+# Blitz Card Game
+
+Requires pygame 
