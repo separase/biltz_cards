@@ -9,11 +9,14 @@ background_colour = (0,128,0)
 color_light = (170,170,170)
 color_dark = (100,100,100)
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption('Tutorial 1')
+pygame.display.set_caption('Blitz Card Game')
 screen.fill(background_colour)
 pygame.display.flip()
+chosen_player=0
 phase1=True
 phase2=False
+phase3=False
+phase4=False
 shuffled=False
 player_1= {}
 player_2= {}
@@ -30,7 +33,6 @@ while True:
                 phase1=False
                 phase2=True
                 num_of_players=2
-                
                 print(num_of_players)
                 pygame.display.update()
             elif (width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20):
@@ -45,7 +47,36 @@ while True:
                 num_of_players=4
                 print(num_of_players)
                 pygame.display.update()
-        if event.type == pygame.QUIT:
+        elif phase3==True and event.type == pygame.MOUSEBUTTONDOWN:
+            if (width/2-230 <= mouse[0] <= width/2-90 and height/2-20 <= mouse[1] <= height/2+20):
+                screen.fill((0,128,0))
+                phase3=False
+                phase4=True
+                chosen_player=1
+                pygame.display.update()
+            elif (width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20):
+                screen.fill((0,128,0))
+                phase3=False
+                phase4=True
+                if num_of_players>2:
+                    chosen_player=2
+                pygame.display.update()
+            elif (width/2+90 <= mouse[0] <= width/2+230 and height/2-20 <= mouse[1] <= height/2+20):
+                screen.fill((0,128,0))
+                phase3=False
+                phase4=True
+                if num_of_players==2:
+                    chosen_player=2
+                elif num_of_players>2:
+                    chosen_player=3
+                pygame.display.update()
+            elif (width/2-70 <= mouse[0] <= width/2+70 and height/2+40 <= mouse[1] <= height/2+80):
+                screen.fill((0,128,0))
+                phase3=False
+                phase4=True
+                chosen_player=4
+                pygame.display.update()
+        elif event.type == pygame.QUIT:
             pygame.quit()
     if phase1:
         if width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20:
@@ -76,15 +107,280 @@ while True:
             pygame.display.update()
     if phase2:
         screen.fill((0,128,0))
+        deck_id=""
+        dealt_cards=[]
         if not shuffled:
             deck=(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")).json()
+            print(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"))
             deck_id=deck["deck_id"]
             shuffled=True
         for i in range(num_of_players):
-
-        """
-        draw 3 cards from the deck for each player
-            repeat card-drawing process based on the amount of players, and assign those cards to them
-
-        """
+            dealt_cards.append((requests.get("https://deckofcardsapi.com/api/deck/"+deck_id+"/draw/?count=3")).json())
+        if num_of_players==2:
+            pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+            text1 = smallfont.render('Show P1' , True , (0,0,0))
+            screen.blit(text1, (width/2-215,height/2-14))
+            pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+            text2 = smallfont.render('Show P2' , True , (0,0,0))
+            screen.blit(text2, (width/2+105,height/2-14))
+        if num_of_players==3:
+            pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+            text1 = smallfont.render('Show P1' , True , (0,0,0))
+            screen.blit(text1, (width/2-215,height/2-14))
+            text2 = smallfont.render('Show P2' , True , (0,0,0))
+            screen.blit(text2, (width/2-55,height/2-14))
+            text3 = smallfont.render('Show P3' , True , (0,0,0))
+            screen.blit(text3, (width/2+105,height/2-14))
+        if num_of_players==4:
+            pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+            pygame.draw.rect(screen,color_dark,[width/2-70,height/2+40,140,40])
+            text1 = smallfont.render('Show P1' , True , (0,0,0))
+            screen.blit(text1, (width/2-215,height/2-14))
+            text2 = smallfont.render('Show P2' , True , (0,0,0))
+            screen.blit(text2, (width/2-55,height/2-14))
+            text3 = smallfont.render('Show P3' , True , (0,0,0))
+            screen.blit(text3, (width/2+105,height/2-14))
+            text4 = smallfont.render('Show P4' , True , (0,0,0))
+            screen.blit(text4, (width/2-55,height/2+44))
+        phase2=False
+        phase3=True
+    if phase3:
+        if (width/2-230 <= mouse[0] <= width/2-90 and height/2-20 <= mouse[1] <= height/2+20):
+            pygame.draw.rect(screen,color_light,[width/2-230,height/2-20,140,40])
+            text2 = smallfont.render('Show P1' , True , (0,0,0))
+            screen.blit(text2,(width/2-215,height/2-14))
+            pygame.display.update()
+        elif (width/2-70 <= mouse[0] <= width/2+70 and height/2-20 <= mouse[1] <= height/2+20) and (num_of_players==3 or num_of_players==4):
+            pygame.draw.rect(screen,color_light,[width/2-70,height/2-20,140,40])
+            text1 = smallfont.render('Show P2' , True , (0,0,0))
+            screen.blit(text1, (width/2-55,height/2-14))
+            pygame.display.update()
+        elif width/2+90 <= mouse[0] <= width/2+230 and height/2-20 <= mouse[1] <= height/2+20 and (num_of_players==2):
+            pygame.draw.rect(screen,color_light,[width/2+90,height/2-20,140,40])
+            text1 = smallfont.render('Show P2' , True , (0,0,0))
+            screen.blit(text1, (width/2+105,height/2-14))
+            pygame.display.update()
+        elif width/2+90 <= mouse[0] <= width/2+230 and height/2-20 <= mouse[1] <= height/2+20 and (num_of_players==3 or num_of_players==4):
+            pygame.draw.rect(screen,color_light,[width/2+90,height/2-20,140,40])
+            text1 = smallfont.render('Show P3' , True , (0,0,0))
+            screen.blit(text1, (width/2+105,height/2-14))
+            pygame.display.update()
+        elif width/2-70 <= mouse[0] <= width/2+70 and height/2+40 <= mouse[1] <= height/2+80 and (num_of_players==4):
+            pygame.draw.rect(screen,color_light,[width/2-70,height/2+40,140,40])
+            text1 = smallfont.render('Show P4' , True , (0,0,0))
+            screen.blit(text1, (width/2-55,height/2+44))
+            pygame.display.update()
+        else:
+            if num_of_players==2:
+                pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+                text1 = smallfont.render('Show P1' , True , (0,0,0))
+                screen.blit(text1, (width/2-215,height/2-14))
+                pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+                text2 = smallfont.render('Show P2' , True , (0,0,0))
+                screen.blit(text2, (width/2+105,height/2-14))
+            elif num_of_players>2:
+                pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
+                pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
+                pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+                text1 = smallfont.render('Show P1' , True , (0,0,0))
+                screen.blit(text1, (width/2-215,height/2-14))
+                text2 = smallfont.render('Show P2' , True , (0,0,0))
+                screen.blit(text2, (width/2-55,height/2-14))
+                text3 = smallfont.render('Show P3' , True , (0,0,0))
+                screen.blit(text3, (width/2+105,height/2-14))
+                if num_of_players>3:
+                    pygame.draw.rect(screen,color_dark,[width/2-70,height/2+40,140,40])
+                    text1 = smallfont.render('Show P4' , True , (0,0,0))
+                    screen.blit(text1, (width/2-55,height/2+44))
+    if phase4:
+        player_1_cards=dealt_cards[0]
+        player_2_cards=dealt_cards[1]
+        player_3_cards=[]
+        player_4_cards=[]
+        if num_of_players>2:
+            player_3_cards=dealt_cards[2]
+            if num_of_players>3:
+                player_4_cards=dealt_cards[3]
+        current_hand=[]
+        if chosen_player==1:
+            current_hand=player_1_cards
+        elif chosen_player==2:
+            current_hand=player_2_cards
+        elif chosen_player==3:
+            current_hand=player_3_cards
+        elif chosen_player==4:
+            current_hand=player_4_cards
+        for i in range(3):
+            print(current_hand)
+            if (current_hand)['cards'][i]['value'] == '1':
+                print(1)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\1_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\1_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\1_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\1_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+            elif (current_hand)['cards'][i]['value'] == '2':
+                print(2)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\2_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\2_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\2_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\2_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+            elif (current_hand)['cards'][i]['value'] == '3':
+                print(3)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\3_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\3_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\3_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\3_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+            elif (current_hand)['cards'][i]['value'] == '4':
+                print(4)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '5':
+                print(5)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '6':
+                print(6)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '7':
+                print(7)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '8':
+                print(8)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '9':
+                print(9)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == '0':
+                print(10)
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == 'JACK':
+                print('JACK')
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == 'QUEEN':
+                print('QUEEN')
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+            elif (current_hand)['cards'][i]['value'] == 'KING':
+                print('KING')
+                if (current_hand)['cards'][i]['suit'] == 'SPADES':
+                    print('SPADES')
+                elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
+                    print('HEARTS')
+                elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    print('CLUBS')
+                elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
+                    print('DIAMONDS')
+        phase4=False
     pygame.display.update()
