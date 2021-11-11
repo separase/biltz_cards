@@ -17,6 +17,7 @@ phase1=True
 phase2=False
 phase3=False
 phase4=False
+phase5=False
 shuffled=False
 player_1= {}
 player_2= {}
@@ -76,6 +77,17 @@ while True:
                 phase4=True
                 chosen_player=4
                 pygame.display.update()
+            elif width/2-70 <= mouse[0] <= width/2+70 and height/2+100 <= mouse[1] <= height/2+140:
+                screen.fill((0,128,0))
+                phase3=False
+                phase5=True
+                pygame.display.update()
+        elif phase4==True and event.type == pygame.MOUSEBUTTONDOWN:
+            if (width/2-80 <= mouse[0] <= width/2+80 and height/2+50 <= mouse[1] <= height/2+90):
+                screen.fill((0,128,0))
+                phase4=False
+                phase3=True
+                pygame.display.update()
         elif event.type == pygame.QUIT:
             pygame.quit()
     if phase1:
@@ -111,11 +123,13 @@ while True:
         dealt_cards=[]
         if not shuffled:
             deck=(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")).json()
-            print(requests.get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1"))
             deck_id=deck["deck_id"]
             shuffled=True
         for i in range(num_of_players):
             dealt_cards.append((requests.get("https://deckofcardsapi.com/api/deck/"+deck_id+"/draw/?count=3")).json())
+
+#get rid of jokers
+
         if num_of_players==2:
             pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
             text1 = smallfont.render('Show P1' , True , (0,0,0))
@@ -174,8 +188,16 @@ while True:
             text1 = smallfont.render('Show P4' , True , (0,0,0))
             screen.blit(text1, (width/2-55,height/2+44))
             pygame.display.update()
+        elif width/2-70 <= mouse[0] <= width/2+70 and height/2+100 <= mouse[1] <= height/2+140:
+            pygame.draw.rect(screen,color_light,[width/2-70,height/2+100,140,40])
+            text1 = smallfont.render('Start' , True , (0,0,0))
+            screen.blit(text1, (width/2-35,height/2+104))
+            pygame.display.update()
         else:
             if num_of_players==2:
+                pygame.draw.rect(screen,color_dark,[width/2-70,height/2+100,140,40])
+                text5 = smallfont.render('Start' , True , (0,0,0))
+                screen.blit(text5, (width/2-35,height/2+104))
                 pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
                 text1 = smallfont.render('Show P1' , True , (0,0,0))
                 screen.blit(text1, (width/2-215,height/2-14))
@@ -186,6 +208,9 @@ while True:
                 pygame.draw.rect(screen,color_dark,[width/2-70,height/2-20,140,40])
                 pygame.draw.rect(screen,color_dark,[width/2-230,height/2-20,140,40])
                 pygame.draw.rect(screen,color_dark,[width/2+90,height/2-20,140,40])
+                pygame.draw.rect(screen,color_dark,[width/2-70,height/2+100,140,40])
+                text5 = smallfont.render('Start' , True , (0,0,0))
+                screen.blit(text5, (width/2-35,height/2+104))
                 text1 = smallfont.render('Show P1' , True , (0,0,0))
                 screen.blit(text1, (width/2-215,height/2-14))
                 text2 = smallfont.render('Show P2' , True , (0,0,0))
@@ -215,9 +240,7 @@ while True:
         elif chosen_player==4:
             current_hand=player_4_cards
         for i in range(3):
-            print(current_hand)
             if (current_hand)['cards'][i]['value'] == '1':
-                print(1)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
                     image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\1_of_spades.png')
@@ -286,101 +309,234 @@ while True:
                 print(4)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\4_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\4_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\4_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\4_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '5':
                 print(5)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\5_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\5_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\5_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                     print('CLUBS')
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\5_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '6':
                 print(6)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\6_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\6_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\6_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                     print('CLUBS')
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\6_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '7':
                 print(7)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\7_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\7_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\7_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\7_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '8':
                 print(8)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\8_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\8_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\8_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\8_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '9':
                 print(9)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\9_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\9_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\9_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\9_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == '0':
                 print(10)
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\10_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\10_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\10_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\10_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == 'JACK':
                 print('JACK')
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\jack_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\jack_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\jack_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\jack_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == 'QUEEN':
                 print('QUEEN')
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\queen_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\queen_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\queen_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\queen_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
             elif (current_hand)['cards'][i]['value'] == 'KING':
                 print('KING')
                 if (current_hand)['cards'][i]['suit'] == 'SPADES':
                     print('SPADES')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\king_of_spades.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'HEARTS':
                     print('HEARTS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\king_of_hearts.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'CLUBS':
                     print('CLUBS')
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\king_of_clubs.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
                 elif (current_hand)['cards'][i]['suit'] == 'DIAMONDS':
                     print('DIAMONDS')
-        phase4=False
+                    image=pygame.image.load(r'C:\Users\C0908186\Blitz\Card Images\king_of_diamonds.png')
+                    screen.blit(pygame.transform.scale(image, (250, 363)), (i*255+5,5))
+                    pygame.display.update()
+        if (width/2-80 <= mouse[0] <= width/2+80 and height/2+50 <= mouse[1] <= height/2+90):
+            pygame.draw.rect(screen,color_light,[width/2-80,height/2+50,160,40])
+            text2 = smallfont.render('Hide Cards' , True , (0,0,0))
+            screen.blit(text2,(width/2-65,height/2+56))
+            pygame.display.update()
+        else:
+            pygame.draw.rect(screen,color_dark,[width/2-80,height/2+50,160,40])
+            text1 = smallfont.render('Hide Cards' , True , (0,0,0))
+            screen.blit(text1, (width/2-65,height/2+56))
+    if phase5:
+
+#iterates through number of players, does each turn
+
+        pass
     pygame.display.update()
