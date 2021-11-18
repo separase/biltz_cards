@@ -598,12 +598,16 @@ while True:
         ctr=int(((requests.get("https://deckofcardsapi.com/api/deck/"+deck_id)).json()['remaining']))
         exit=False
         screen.fill((0,128,0))
+        current_player=0
         if num_of_players==2:
             textsurface = smallfont.render('Turn: Player '+str((p5ctr)%2+1), False, (0, 0, 0))
+            current_player=(p5ctr)%2+1
         elif num_of_players==3:
             textsurface = smallfont.render('Turn: Player '+str((p5ctr)%3+1), False, (0, 0, 0))
+            current_player=(p5ctr)%3+1
         elif num_of_players==4:
             textsurface = smallfont.render('Turn: Player '+str((p5ctr)%4+1), False, (0, 0, 0))
+            current_player=(p5ctr)%4+1
         screen.blit(textsurface,(width/2-50,height/2-300))
         p5ctr+=1
         pygame.display.update()
@@ -633,8 +637,37 @@ while True:
                 text2 = smallfont.render('Card 3 - Press 3' , True , (0,0,0))
                 screen.blit(text2, (width/2-65,height/2-94))
                 print("you pressed q")
-                break
-            elif keyboard.read_key()=="w":
+                while True:
+                    if keyboard.read_key()=="1":
+                        if current_player==1:
+                            player_1_cards['cards'][0].pop()
+                        elif current_player==2:
+                            player_2_cards['cards'][0].pop()
+                        elif current_player==3:
+                            player_3_cards['cards'][0].pop()
+                        elif current_player==4:
+                            player_4_cards['cards'][0].pop()
+                        break
+                    elif keyboard.read_key()=="2":
+                        if current_player==1:
+                            player_1_cards['cards'][1].pop()
+                        elif current_player==2:
+                            player_2_cards['cards'][1].pop()
+                        elif current_player==3:
+                            player_3_cards['cards'][1].pop()
+                        elif current_player==4:
+                            player_4_cards['cards'][1].pop()
+                        break
+                    elif keyboard.read_key()=="3":
+                        if current_player==1:
+                            player_1_cards['cards'][2].pop()
+                        elif current_player==2:
+                            player_2_cards['cards'][2].pop()
+                        elif current_player==3:
+                            player_3_cards['cards'][2].pop()
+                        elif current_player==4:
+                            player_4_cards['cards'][2].pop()
+                        break
                 print("you pressed w")
                 break
             elif keyboard.read_key()=="e":
